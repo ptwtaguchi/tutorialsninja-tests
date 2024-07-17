@@ -22,9 +22,6 @@ jobs:
         pip install -r requirements.txt
         playwright install
 
-    - name: Set PYTHONPATH
-      run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
-
-    - name: Run tests
+    - name: Run tests with xvfb
       run: |
-        pytest
+        xvfb-run -a pytest
