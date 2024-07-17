@@ -1,7 +1,22 @@
-# tests/conftest.py
-import sys
-import os
+import pytest
+from playwright.sync_api import sync_playwright
 
-# プロジェクトのルートディレクトリを取得
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(root_dir)
+@pytest.fixture(scope="session")
+def browser():
+    playwright = sync_playwright().start()
+    browser = playwright.chromium.launch(headless=False)
+    yield browser
+    browser.close()
+    playwright.stop()
+
+@pytest.fixture(scope="session")
+def browser_context(browser):
+    context = browser.new_context()
+    yield context
+    context.close()
+
+@pytest.fixture(scope="function")
+def page(browser_context):
+    page = browser_context.new_page()
+    yield page
+    page.close()

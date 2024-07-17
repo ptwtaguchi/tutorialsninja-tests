@@ -1,8 +1,13 @@
-from pages.base_page import BasePage
+from playwright.sync_api import Page
 
-class ProductPage(BasePage):
+class ProductPage:
+    def __init__(self, page):
+        self.page = page
+
     def add_to_cart(self):
         self.page.click("button#button-cart")
+        self.page.wait_for_selector("div.alert-success", timeout=10000)  # 成功メッセージを待つ
 
-    def get_text(self, selector):
-        return self.page.text_content(selector)
+    def is_product_added_to_cart(self):
+        # 成功メッセージが表示されているか確認する
+        return self.page.is_visible("div.alert-success")
