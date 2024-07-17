@@ -23,5 +23,7 @@ jobs:
         playwright install
 
     - name: Run tests with xvfb
+      env:
+        PYTHONPATH: .
       run: |
         xvfb-run -a pytest
