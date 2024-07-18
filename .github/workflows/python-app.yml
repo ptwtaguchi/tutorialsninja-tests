@@ -26,6 +26,8 @@ jobs:
         sudo apt-get install -y libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libxrandr2 libgbm-dev
         playwright install-deps
         playwright install chromium
+    - name: Set PYTHONPATH
+      run: echo "PYTHONPATH=." >> $GITHUB_ENV
     - name: Run tests with Playwright
       run: |
         xvfb-run -a pytest --capture=tee-sys --maxfail=3 --disable-warnings
