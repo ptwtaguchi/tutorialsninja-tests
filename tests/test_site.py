@@ -10,6 +10,17 @@ import time
 
 BASE_URL = "https://tutorialsninja.com/demo/"
 
+def log_execution_time(func):
+    def wrapper(self, page, *args, **kwargs):
+        start_time = time.time()
+        print(f"Starting {func.__name__} at {datetime.now()}")
+        result = func(self, page, *args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"Finished {func.__name__} at {datetime.now()}, Execution time: {execution_time:.2f} seconds")
+        return result
+    return wrapper
+
 def generate_unique_email():
     current_time = datetime.now().strftime("%Y%m%d%H%M%S")
     return f"testuser_{current_time}_{uuid.uuid4()}@example.com"
@@ -28,16 +39,6 @@ def clear_cart(page):
     for button in remove_buttons:
         button.click()
     page.wait_for_timeout(1000)  # Wait for 1 second to ensure cart is cleared
-
-def log_execution_time(func):
-    def wrapper(self, page, *args, **kwargs):
-        start_time = time.time()
-        print(f"Starting {func.__name__} at {datetime.now()}")
-        result = func(self, page, *args, **kwargs)
-        end_time = time.time()
-        print(f"Finished {func.__name__} at {datetime.now()} (Duration: {end_time - start_time} seconds)")
-        return result
-    return wrapper
 
 @pytest.mark.usefixtures("page")
 class TestHomePage:
@@ -113,9 +114,6 @@ class TestUserLoginLogout:
         page.click("a[href$='route=account/logout']:visible")
         page.wait_for_selector("div#content h1:has-text('Account Logout')")
         assert "Account Logout" in account_page.get_text("div#content h1")
-
-        # 一定時間待つ
-        # page.wait_for_timeout(5000)
 
         # サイドバーのログインリンクを待機してクリック
         try:
@@ -211,10 +209,10 @@ class TestAddToCart:
         # ページの完全読み込みを待機
         page.wait_for_load_state('load')
         page.wait_for_load_state('networkidle')
-        
+
         # 商品を検索する
         home_page.search_product("iPhone")
-        
+
         # 検索結果から商品を選択する
         page.wait_for_selector(f"a:has-text('iPhone')", timeout=60000)
         home_page.select_product("iPhone")
