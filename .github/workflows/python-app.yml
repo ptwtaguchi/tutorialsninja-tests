@@ -31,5 +31,7 @@ jobs:
         npx playwright install chromium
     
     - name: Run tests with Playwright
+      env:
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         xvfb-run -a pytest --capture=tee-sys --maxfail=3 --disable-warnings
