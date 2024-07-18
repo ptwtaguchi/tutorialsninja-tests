@@ -11,10 +11,10 @@ import time
 BASE_URL = "https://tutorialsninja.com/demo/"
 
 def log_execution_time(func):
-    def wrapper(self, page, *args, **kwargs):
+    def wrapper(self, *args, **kwargs):
         start_time = time.time()
         print(f"Starting {func.__name__} at {datetime.now()}")
-        result = func(self, page, *args, **kwargs)
+        result = func(self, *args, **kwargs)
         end_time = time.time()
         execution_time = end_time - start_time
         print(f"Finished {func.__name__} at {datetime.now()}, Execution time: {execution_time:.2f} seconds")
