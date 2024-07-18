@@ -6,20 +6,9 @@ from pages.account_page import AccountPage
 from pages.product_page import ProductPage
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage
+import time
 
 BASE_URL = "https://tutorialsninja.com/demo/"
-
-@pytest.fixture(scope="session")
-def browser_context(browser):
-    context = browser.new_context()
-    yield context
-    context.close()
-
-@pytest.fixture(scope="function")
-def page(browser_context):
-    page = browser_context.new_page()
-    yield page
-    page.close()
 
 def generate_unique_email():
     current_time = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -40,8 +29,19 @@ def clear_cart(page):
         button.click()
     page.wait_for_timeout(1000)  # Wait for 1 second to ensure cart is cleared
 
+def log_execution_time(func):
+    def wrapper(self, page, *args, **kwargs):
+        start_time = time.time()
+        print(f"Starting {func.__name__} at {datetime.now()}")
+        result = func(self, page, *args, **kwargs)
+        end_time = time.time()
+        print(f"Finished {func.__name__} at {datetime.now()} (Duration: {end_time - start_time} seconds)")
+        return result
+    return wrapper
+
 @pytest.mark.usefixtures("page")
 class TestHomePage:
+    @log_execution_time
     def test_home_page_display(self, page):
         home_page = HomePage(page)
         home_page.open()
@@ -50,6 +50,7 @@ class TestHomePage:
 
 @pytest.mark.usefixtures("page")
 class TestUserRegistration:
+    @log_execution_time
     def test_user_registration(self, page):
         home_page = HomePage(page)
         account_page = AccountPage(page)
@@ -79,6 +80,7 @@ class TestUserRegistration:
 
 @pytest.mark.usefixtures("page")
 class TestUserLoginLogout:
+    @log_execution_time
     def test_user_login_logout(self, page):
         home_page = HomePage(page)
         account_page = AccountPage(page)
@@ -140,6 +142,7 @@ class TestUserLoginLogout:
 
 @pytest.mark.usefixtures("page")
 class TestPasswordReset:
+    @log_execution_time
     def test_password_reset(self, page):
         home_page = HomePage(page)
         account_page = AccountPage(page)
@@ -186,6 +189,7 @@ class TestPasswordReset:
 @pytest.mark.usefixtures("page")
 class TestProductSearch:
     @pytest.mark.parametrize("product_name", ["iPhone"])
+    @log_execution_time
     def test_product_search(self, page, product_name):
         home_page = HomePage(page)
         home_page.open()
@@ -195,6 +199,7 @@ class TestProductSearch:
 
 @pytest.mark.usefixtures("page")
 class TestAddToCart:
+    @log_execution_time
     def test_add_to_cart(self, page):
         home_page = HomePage(page)
         product_page = ProductPage(page)
@@ -235,6 +240,7 @@ class TestAddToCart:
 
 @pytest.mark.usefixtures("page")
 class TestCheckoutProcess:
+    @log_execution_time
     def test_checkout_process(self, page):
         home_page = HomePage(page)
         product_page = ProductPage(page)
@@ -278,6 +284,7 @@ class TestCheckoutProcess:
 
 @pytest.mark.usefixtures("page")
 class TestNavigationAndPages:
+    @log_execution_time
     def test_navigation_and_pages(self, page):
         home_page = HomePage(page)
 
