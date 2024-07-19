@@ -7,5 +7,4 @@ class TestHomePage:
     @log_execution_time
     def test_home_page_display(self, page):
         home_page = HomePage(page)
-        home_page.open()
         assert home_page.is_home_page_visible()
