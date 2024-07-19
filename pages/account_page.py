@@ -13,7 +13,7 @@ class AccountPage:
         self.page.fill("input[name='confirm']", password)
         self.page.check("input[name='agree']")
         self.page.click("input[value='Continue']")
-    
+
     def get_text(self, selector):
         return self.page.text_content(selector)
 

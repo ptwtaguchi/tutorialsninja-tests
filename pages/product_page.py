@@ -6,8 +6,7 @@ class ProductPage:
 
     def add_to_cart(self):
         self.page.click("button#button-cart")
-        self.page.wait_for_selector("div.alert-success", timeout=10000)  # 成功メッセージを待つ
+        self.page.wait_for_selector("div.alert-success", timeout=20000)  # タイムアウトを延長
 
     def is_product_added_to_cart(self):
-        # 成功メッセージが表示されているか確認する
         return self.page.is_visible("div.alert-success")

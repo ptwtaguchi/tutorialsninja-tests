@@ -17,7 +17,3 @@ def page(browser):
     page = browser.new_page()
     yield page
     page.close()
-
-@pytest.fixture
-def product_name():
-    return "iPhone"

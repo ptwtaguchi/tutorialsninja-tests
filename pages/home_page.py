@@ -2,7 +2,7 @@ from playwright.sync_api import Page
 from bs4 import BeautifulSoup
 
 class HomePage:
-    def __init__(self, page):
+    def __init__(self, page: Page):
         self.page = page
 
     def open(self):
@@ -27,11 +27,6 @@ class HomePage:
     def is_home_page_visible(self):
         logo_visible = self.page.is_visible("div#logo")
         content_visible = self.page.is_visible("div#content")
-        
-        # デバッグ用ログ
-        print(f"Logo visible: {logo_visible}")
-        print(f"Content visible: {content_visible}")
-
         return logo_visible and content_visible
 
     def is_product_search_successful(self, product_name):
