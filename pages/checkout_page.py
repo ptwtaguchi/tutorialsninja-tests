@@ -10,7 +10,7 @@ class CheckoutPage:
         self.page.wait_for_load_state('networkidle')
         self.page.wait_for_selector("div#content h1:has-text('Checkout')", timeout=TIMEOUT)
 
-    def is_checkout_page_visible(self):
+    def is_checkout_successful(self):
         return self.page.is_visible("div#content h1:has-text('Checkout')")
 
     def is_cart_page_visible(self):
